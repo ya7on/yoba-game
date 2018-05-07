@@ -4,7 +4,20 @@
     "watch": "webpack --watch"
   },
   "devDependencies": {
-    "ts-loader": "^4.2.0",
-    "typescript": "^2.8.3"
-  }
+    "ts-loader": "^4.3.0",
+    "typescript": "^2.8.3",
+    "webpack": "^4.8.0"
+  },
+  "name": "first",
+  "description": "1. Находится ли объект в поле зрения",
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://BehindLoader@bitbucket.org/kojimbo_games/first.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/kojimbo_games/first#readme"
 }
