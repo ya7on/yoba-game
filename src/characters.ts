@@ -22,6 +22,12 @@ class Character {
     hp: number;
     speed: number;
 
+    gravity:number = 0;
+    /** Ускорение свободного падения */
+    G:number = 0.3;
+    /** Максимальное ускорение */
+    MAX_GRAVITY:number = 10;
+
     image: HTMLImageElement;
 
     constructor(options:CharacterOptions) {
@@ -37,6 +43,8 @@ class Character {
 
         this.image = new Image();
         this.image.src = this.sprite.url;
+
+        setInterval(() => this._step(), 0);
     }
 
     draw(ctx:CanvasRenderingContext2D):void {
@@ -52,11 +60,53 @@ class Character {
             this.sprite.dHeight
         );
     }
+
+    _step():void {
+        this.y += this.gravity;
+
+        this.gravity = this.gravity >= this.MAX_GRAVITY ? this.MAX_GRAVITY : this.gravity + this.G;
+
+        // TEST
+        if (this.y > 700) {
+            this.gravity = -0;
+        }
+    }
 }
 
 /** Класс ГГ */
 export class Player extends Character {
+    keyPressed:Array<boolean> = [];
+    keyEvents:Array<{(): void}> = [];
+
     constructor(options:CharacterOptions) {
         super(options);
+
+        // Забиваются функции на нажатие клавиш
+        this.keyEvents[68] = this.move.right;
+        this.keyEvents[65] = this.move.left;
+
+        document.addEventListener('keydown', (e:KeyboardEvent) => this._keyboardEvents(e));
+        document.addEventListener('keyup', (e:KeyboardEvent) => this._keyboardEvents(e));
+
+        setInterval(() => this._listener(), 0);
+    }
+
+    move = {
+        left: () => this.x -= this.speed,
+        right: () => this.x += this.speed,
+    }
+
+    _listener():void {
+        for (var k in this.keyPressed) { // Нажатие клавиш
+            if (this.keyEvents[k]) this.keyEvents[k]();
+        }
+    }
+
+    _keyboardEvents(e:KeyboardEvent):void {
+        if (e.type == 'keydown') {
+            this.keyPressed[e.keyCode] = true;
+        } else if (this.keyPressed[e.keyCode]) {
+            delete this.keyPressed[e.keyCode];
+        }
     }
 }

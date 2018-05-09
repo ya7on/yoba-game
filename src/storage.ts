@@ -49,7 +49,7 @@ export let CHAR_TYPES:Char_Types = {
     'player': {
         name: 'player',
         hp: 100,
-        speed: 10,
+        speed: 1,
         sprite: SPRITES.player,
     },
 }

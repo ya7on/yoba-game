@@ -21,7 +21,7 @@ class Main {
     };
 
     render() {
-        this.ctx.clearRect(0,0,100,100)
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         player.draw(this.ctx);
     }
 }
