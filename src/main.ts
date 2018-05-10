@@ -18,6 +18,8 @@ class Main {
         this.canvas.height = 768; // TODO
         // вызов рендера
         setInterval(() => this.render(), 0);
+
+        this.ctx.imageSmoothingEnabled = false;
     };
 
     render() {

@@ -30,6 +30,14 @@ class Character {
 
     image: HTMLImageElement;
 
+    direction:string = 'right';
+
+    // Анимация
+    in_move:boolean = false;
+    sprite_index:number = 0;
+    anim_speed:number = 100;
+    anim_index:number = 0;
+
     constructor(options:CharacterOptions) {
         this.type = CHAR_TYPES[options.type];
 
@@ -48,17 +56,38 @@ class Character {
     }
 
     draw(ctx:CanvasRenderingContext2D):void {
-        ctx.drawImage(
-            this.image,
-            this.sprite.sx,
-            this.sprite.sy,
-            this.sprite.sWidth,
-            this.sprite.sHeight,
-            this.x,
-            this.y,
-            this.sprite.dWidth,
-            this.sprite.dHeight
-        );
+        if (this.in_move) { // Если в движении
+            ctx.drawImage(
+                this.image,
+                this.sprite.move[this.direction][this.sprite_index].sx,
+                this.sprite.move[this.direction][this.sprite_index].sy,
+                this.sprite.move[this.direction][this.sprite_index].sWidth,
+                this.sprite.move[this.direction][this.sprite_index].sHeight,
+                this.x,
+                this.y,
+                this.sprite.move[this.direction][this.sprite_index].dWidth,
+                this.sprite.move[this.direction][this.sprite_index].dHeight
+            );
+            this.anim_index++;
+            if (this.anim_index >= this.anim_speed) {
+                this.sprite_index++;
+            }
+            if (this.sprite_index >= Object.keys(this.sprite.move[this.direction]).length-1) {
+                this.sprite_index = 0;
+            }
+        } else {
+            ctx.drawImage(
+                this.image,
+                this.sprite.standing[this.direction].sx,
+                this.sprite.standing[this.direction].sy,
+                this.sprite.standing[this.direction].sWidth,
+                this.sprite.standing[this.direction].sHeight,
+                this.x,
+                this.y,
+                this.sprite.standing[this.direction].dWidth,
+                this.sprite.standing[this.direction].dHeight
+            );
+        }
     }
 
     _step():void {
@@ -67,7 +96,7 @@ class Character {
         this.gravity = this.gravity >= this.MAX_GRAVITY ? this.MAX_GRAVITY : this.gravity + this.G;
 
         // TEST
-        if (this.y > 700) {
+        if (this.y > 400) {
             this.gravity = -0;
         }
     }
@@ -92,8 +121,16 @@ export class Player extends Character {
     }
 
     move = {
-        left: () => this.x -= this.speed,
-        right: () => this.x += this.speed,
+        left: () => {
+            this.x -= this.speed;
+            this.direction = 'left';
+            this.in_move = true;
+        },
+        right: () => {
+            this.x += this.speed;
+            this.direction = 'right';
+            this.in_move = true;
+        },
     }
 
     _listener():void {
@@ -107,6 +144,7 @@ export class Player extends Character {
             this.keyPressed[e.keyCode] = true;
         } else if (this.keyPressed[e.keyCode]) {
             delete this.keyPressed[e.keyCode];
+            this.in_move = false;
         }
     }
 }
