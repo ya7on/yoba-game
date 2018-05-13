@@ -126,3 +126,18 @@ export let CHAR_TYPES:{[index:string]:Char_Type} = {
         sprite: SPRITES.player,
     },
 }
+
+/** Параметры canvas-объекта */
+export interface canvasObj {
+    x: number,
+    y: number,
+    width: number,
+    height: number
+}
+
+/** Параметры canvas-кнопок */
+export interface canvasButton {
+    param: canvasObj,
+    text?: string,
+    event?: Function
+}
