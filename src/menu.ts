@@ -13,7 +13,7 @@ export class Menu {
     buttonEvents: { [key: string]: Function } = {
         start: () => {
             this.close();
-            new Main;
+            new Main();
         }
     }
     listener: EventListenerObject = listenClick.bind(this);
@@ -57,6 +57,7 @@ export class Menu {
 
     close() {
         this.canvas.removeEventListener('click', this.listener);
+        this.active = false;
     }
 }
 
