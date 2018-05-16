@@ -1,10 +1,5 @@
-import { Player } from "./characters";
-import { Location } from "./location";
-import { Menu } from "./menu";
-
-let MENU:Menu = new Menu();
-
-let player = new Player({x:1, y:1, type: 'player'});
+import { GLOBAL, Location } from "./location";
+import { Menu } from "./menu"
 
 class Main {
     canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('app');
@@ -24,8 +19,10 @@ class Main {
 
     render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        player.draw(this.ctx);
+        if (GLOBAL.PLAYER) {
+            GLOBAL.PLAYER.draw(this.ctx);
+        }
     }
 }
 
-new Main();
+new Main()

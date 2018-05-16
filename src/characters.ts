@@ -1,4 +1,4 @@
-import { CHAR_TYPES, Sprite, Char_Type } from "./storage";
+import { CHAR_TYPES, Sprite, Sprite_Frame, Char_Type } from "./storage";
 
 /** Тип данных которые приходят в виде входного аргумента в класс Character */
 interface CharacterOptions {
@@ -17,6 +17,7 @@ class Character {
     y: number;
 
     sprite: Sprite;
+    spriteFrame: Sprite_Frame;
     type: Char_Type;
 
     hp: number;
@@ -57,17 +58,14 @@ class Character {
 
     draw(ctx:CanvasRenderingContext2D):void {
         if (this.in_move) { // Если в движении
-            ctx.drawImage(
-                this.image,
-                this.sprite.move[this.direction][this.sprite_index].sx,
-                this.sprite.move[this.direction][this.sprite_index].sy,
-                this.sprite.move[this.direction][this.sprite_index].sWidth,
-                this.sprite.move[this.direction][this.sprite_index].sHeight,
-                this.x,
-                this.y,
-                this.sprite.move[this.direction][this.sprite_index].dWidth,
-                this.sprite.move[this.direction][this.sprite_index].dHeight
-            );
+            this.spriteFrame = {
+                dWidth: this.sprite.move[this.direction][this.sprite_index].dWidth,
+                dHeight: this.sprite.move[this.direction][this.sprite_index].dHeight,
+                sx: this.sprite.move[this.direction][this.sprite_index].sx,
+                sy: this.sprite.move[this.direction][this.sprite_index].sy,
+                sWidth: this.sprite.move[this.direction][this.sprite_index].sWidth,
+                sHeight: this.sprite.move[this.direction][this.sprite_index].sHeight,
+            };
             this.anim_index++;
             if (this.anim_index >= this.anim_speed) {
                 this.sprite_index++;
@@ -76,18 +74,26 @@ class Character {
                 this.sprite_index = 0;
             }
         } else {
-            ctx.drawImage(
-                this.image,
-                this.sprite.standing[this.direction].sx,
-                this.sprite.standing[this.direction].sy,
-                this.sprite.standing[this.direction].sWidth,
-                this.sprite.standing[this.direction].sHeight,
-                this.x,
-                this.y,
-                this.sprite.standing[this.direction].dWidth,
-                this.sprite.standing[this.direction].dHeight
-            );
+            this.spriteFrame = {
+                dWidth: this.sprite.standing[this.direction].dWidth,
+                dHeight: this.sprite.standing[this.direction].dHeight,
+                sx: this.sprite.standing[this.direction].sx,
+                sy: this.sprite.standing[this.direction].sy,
+                sWidth: this.sprite.standing[this.direction].sWidth,
+                sHeight: this.sprite.standing[this.direction].sHeight
+            }
         }
+        ctx.drawImage(
+            this.image,
+            this.spriteFrame.sx,
+            this.spriteFrame.sy,
+            this.spriteFrame.sWidth,
+            this.spriteFrame.sHeight,
+            this.x,
+            this.y,
+            this.spriteFrame.dWidth,
+            this.spriteFrame.dHeight
+        );
     }
 
     _step():void {

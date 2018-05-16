@@ -9,7 +9,7 @@ export interface Char_Type {
     /** Название */
     name: string;
 }
-interface Sprite_Frame {
+export interface Sprite_Frame {
     // размеры изображения
     dWidth: number;
     dHeight: number;
