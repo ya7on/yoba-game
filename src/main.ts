@@ -1,30 +1,31 @@
-import { Player } from "./characters";
-import { Location } from "./location";
+import { GLOBAL, Location } from "./location";
 import { Menu } from "./menu";
 
-
-let player = new Player({x:1, y:1, type: 'player'});
-let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('app');
-let ctx: CanvasRenderingContext2D = canvas.getContext('2d');
+GLOBAL.CANVAS = <HTMLCanvasElement>document.getElementById('app');
+GLOBAL.CTX = GLOBAL.CANVAS.getContext('2d');
 
 // Настройка канваса
-canvas.width = window.innerWidth; // TODO
-canvas.height = window.innerHeight; // TODO
+GLOBAL.CANVAS.width = window.innerWidth; // TODO
+GLOBAL.CANVAS.height = window.innerHeight; // TODO
 
-let MENU:Menu = new Menu(ctx, canvas);
+let MENU:Menu = new Menu(GLOBAL.CTX, GLOBAL.CANVAS);
 
 export class Main {
     constructor() {
         // вызов рендера
         setInterval(() => this.render(), 0);
 
-        ctx.imageSmoothingEnabled = false;
+        GLOBAL.CTX.imageSmoothingEnabled = false;
     };
 
     render() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        player.draw(ctx);
+        if (!MENU.active) {
+            GLOBAL.CTX.clearRect(0, 0, GLOBAL.CANVAS.width, GLOBAL.CANVAS.height);
+            if (GLOBAL.PLAYER) {
+                GLOBAL.PLAYER.draw(GLOBAL.CTX);
+            }
+        }
     }
 }
 
-// new Main();
+new Main()
