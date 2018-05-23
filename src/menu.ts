@@ -1,5 +1,6 @@
-import { canvasObj, canvasButton } from "./storage";
+import { CanvasObj, CanvasButton, Point } from "./storage";
 import { Main } from "./main";
+import { GLOBAL } from "./location"
 
 
 export class Menu {
@@ -7,7 +8,7 @@ export class Menu {
     items:Array<string>;
     width: number = 200;
     height: number = 50;
-    buttons: Array<canvasButton> = [];
+    buttons: Array<CanvasButton> = [];
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
     buttonEvents: { [key: string]: Function } = {
@@ -27,12 +28,12 @@ export class Menu {
 
     render() {
         this.items = ['start', 'settings'];
-        this.ctx.font = "24px serif";
+        this.ctx.font = "Bold 24px Courier";
         var x: number = this.ctx.canvas.width * 0.5 - 200 * 0.5;
-        var y: number = 0;
+        var y: number = 100;
         for (var text of this.items) {
             y += 100;
-            let param: canvasObj = {
+            let param: CanvasObj = {
                 x: x,
                 y: y,
                 width: this.width,
@@ -43,13 +44,16 @@ export class Menu {
 
     }
 
-    drawButton(text: string, param: canvasObj) {
-        this.ctx.fillStyle = 'pink';
-        this.ctx.fillRect(param.x, param.y, param.width, param.height);
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillText(text, param.x, param.y + 25);
+    drawButton(text: string, object: CanvasObj) {
+        GLOBAL.CTX.fillStyle = 'pink';
+        GLOBAL.CTX.fillRect(object.x, object.y, object.width, object.height);
+        GLOBAL.CTX.fillStyle = 'black';
+        let center: Point = getCenter(object);
+        let textWidth: number = GLOBAL.CTX.measureText(text).width;
+        let textHeight: number = textWidth / text.length;
+        GLOBAL.CTX.fillText(text, center.x - textWidth * 0.5, center.y + textHeight * 0.5);
         this.buttons.push({
-            param: param,
+            param: object,
             text: text,
             event: this.buttonEvents[text]
         });
@@ -63,7 +67,7 @@ export class Menu {
 
 // TODO: Возможно, стоит превратить в метод
 /** Функция проверяет указанный объект на вхождение в него x, y */
-function contains(obj: canvasObj, x: number, y: number): boolean {
+function contains(obj: CanvasObj, x: number, y: number): boolean {
     if (x > obj.x && x < obj.x + obj.width && y > obj.y && y < obj.y + obj.height) {
         return true;
     }
@@ -76,4 +80,11 @@ function listenClick (event: MouseEvent): void {
             button.event && button.event();
         }
     }
+}
+
+/** Функция возвращает центр указанного объекта */
+function getCenter(object: CanvasObj): Point {
+    let x: number = object.x + object.width * 0.5;
+    let y: number = object.y + object.height * 0.5;
+    return {x: x, y: y}
 }

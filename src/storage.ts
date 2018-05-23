@@ -128,16 +128,23 @@ export let CHAR_TYPES:{[index:string]:Char_Type} = {
 }
 
 /** Параметры canvas-объекта */
-export interface canvasObj {
+export interface CanvasObj {
     x: number,
     y: number,
     width: number,
     height: number
 }
 
+// TODO: Превратить в класс
 /** Параметры canvas-кнопок */
-export interface canvasButton {
-    param: canvasObj,
+export interface CanvasButton {
+    param: CanvasObj,
     text?: string,
     event?: Function
+}
+
+/** Кордина типа (x, y) */
+export interface Point {
+    x: number,
+    y: number
 }
