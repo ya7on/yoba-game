@@ -13,7 +13,9 @@
   "description": "1. Находится ли объект в поле зрения",
   "version": "1.0.0",
   "main": "webpack.config.js",
-  "dependencies": {},
+  "dependencies": {
+    "jshint": "^2.9.5"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://BehindLoader@bitbucket.org/kojimbo_games/first.git"

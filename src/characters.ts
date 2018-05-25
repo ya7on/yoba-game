@@ -1,4 +1,5 @@
 import { CHAR_TYPES, Sprite, Sprite_Frame, Char_Type } from "./storage";
+import { GLOBAL } from "./location";
 
 /** Тип данных которые приходят в виде входного аргумента в класс Character */
 interface CharacterOptions {
@@ -52,11 +53,10 @@ class Character {
 
         this.image = new Image();
         this.image.src = this.sprite.url;
-
-        setInterval(() => this._step(), 0);
     }
 
-    draw(ctx:CanvasRenderingContext2D):void {
+    /** Отрисовка этого персонажа */
+    draw():void {
         if (this.in_move) { // Если в движении
             this.spriteFrame = {
                 dWidth: this.sprite.move[this.direction][this.sprite_index].dWidth,
@@ -83,7 +83,7 @@ class Character {
                 sHeight: this.sprite.standing[this.direction].sHeight
             }
         }
-        ctx.drawImage(
+        GLOBAL.CTX.drawImage(
             this.image,
             this.spriteFrame.sx,
             this.spriteFrame.sy,
@@ -96,13 +96,14 @@ class Character {
         );
     }
 
+    /** Общая для всех постоянно выполняемая функция */
     _step():void {
         this.y += this.gravity;
 
         this.gravity = this.gravity >= this.MAX_GRAVITY ? this.MAX_GRAVITY : this.gravity + this.G;
 
         // TEST
-        if (this.y > 400) {
+        if (this.y > 200) {
             this.gravity = -0;
         }
     }
@@ -122,8 +123,6 @@ export class Player extends Character {
 
         document.addEventListener('keydown', (e:KeyboardEvent) => this._keyboardEvents(e));
         document.addEventListener('keyup', (e:KeyboardEvent) => this._keyboardEvents(e));
-
-        setInterval(() => this._listener(), 0);
     }
 
     move = {
@@ -139,6 +138,7 @@ export class Player extends Character {
         },
     }
 
+    /** Постоянно выполняемая функция, проверяющая нажатие клавиш */
     _listener():void {
         for (var k in this.keyPressed) { // Нажатие клавиш
             if (this.keyEvents[k]) this.keyEvents[k]();
