@@ -1,4 +1,7 @@
 import { Player } from "./characters";
+import { Scene } from "./scene";
+import { Menu } from "./menu";
+import { Terrain } from "./terrain"
 
 interface GlobalsType {
     /** Персонаж игрока */
@@ -8,10 +11,13 @@ interface GlobalsType {
     NPC: Array<any>; // TODO
 
     /** Окружение */
-    TERRAIN: Array<Terrain>;
+    TERRAIN: Terrain;
+
+    /** Сцена */
+    SCENE: Scene;
 
     // /** Меню */
-    // MENU: any;
+    MENU: Menu;
 
     /** Контекст */
     CTX: CanvasRenderingContext2D;
@@ -23,13 +29,14 @@ interface GlobalsType {
 export let GLOBAL:GlobalsType = {
     PLAYER: null,
     NPC: [],
-    TERRAIN: [],
-    // MENU: null,
+    TERRAIN: null,
+    SCENE: null,
+    MENU: null,
     CTX: null,
     CANVAS: null
 }
 
-GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
+// GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
 
 /** Класс загрузки локаций */
 export class Location {

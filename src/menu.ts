@@ -1,6 +1,8 @@
 import { CanvasObj, CanvasButton, Point } from "./storage";
 import { Main } from "./main";
 import { GLOBAL } from "./location"
+import { Player } from "./characters"
+import { Scene } from "./scene";
 
 
 export class Menu {
@@ -9,27 +11,25 @@ export class Menu {
     width: number = 200;
     height: number = 50;
     buttons: Array<CanvasButton> = [];
-    canvas: HTMLCanvasElement;
-    ctx: CanvasRenderingContext2D;
     buttonEvents: { [key: string]: Function } = {
         start: () => {
             this.close();
-            new Main();
+            GLOBAL.SCENE = new Scene();
+            GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
+            GLOBAL.SCENE.active = true;
         }
     }
     listener: EventListenerObject = listenClick.bind(this);
 
-    constructor(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-        this.canvas = canvas;
-        this.ctx = ctx;
-        this.canvas.addEventListener('click', this.listener);
+    constructor() {
+        GLOBAL.CANVAS.addEventListener('click', this.listener);
         this.render();
     }
 
     render() {
         this.items = ['start', 'settings'];
-        this.ctx.font = "Bold 24px Courier";
-        var x: number = this.ctx.canvas.width * 0.5 - 200 * 0.5;
+        GLOBAL.CTX.font = "Bold 24px Courier";
+        var x: number = GLOBAL.CTX.canvas.width * 0.5 - 200 * 0.5;
         var y: number = 100;
         for (var text of this.items) {
             y += 100;
@@ -60,7 +60,7 @@ export class Menu {
     }
 
     close() {
-        this.canvas.removeEventListener('click', this.listener);
+        GLOBAL.CANVAS.removeEventListener('click', this.listener);
         this.active = false;
     }
 }

@@ -1,12 +1,18 @@
 // import { Terrain_Type } from "./storage";
+import { CanvasObj, LevelJSON } from "./storage";
+import json from '../level_models/one.json';
+import { GLOBAL } from './location';
 
-class Terrain {
-    x:number;
-    y:number;
-    width:number;
-    height:number;
+export class Terrain {
+    data: LevelJSON
+    constructor() {
+        this.data = json;
+    }
 
-    constructor(options:{}) {
-
+    render() {
+        GLOBAL.CTX.fillStyle = 'green';
+        for (let platform of this.data.platforms) {
+            GLOBAL.CTX.fillRect(platform.x, platform.y, platform.width, platform.height);
+        }
     }
 }

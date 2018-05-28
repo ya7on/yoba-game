@@ -143,8 +143,12 @@ export interface CanvasButton {
     event?: Function
 }
 
-/** Кордина типа (x, y) */
+/** Кордината типа (x, y) */
 export interface Point {
     x: number,
     y: number
+}
+
+export interface LevelJSON {
+    platforms: CanvasObj[]
 }

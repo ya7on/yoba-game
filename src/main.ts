@@ -5,10 +5,10 @@ GLOBAL.CANVAS = <HTMLCanvasElement>document.getElementById('app');
 GLOBAL.CTX = GLOBAL.CANVAS.getContext('2d');
 
 // Настройка канваса
-GLOBAL.CANVAS.width = window.innerWidth; // TODO
-GLOBAL.CANVAS.height = window.innerHeight; // TODO
+GLOBAL.CANVAS.width = window.innerWidth;
+GLOBAL.CANVAS.height = window.innerHeight;
 
-let MENU:Menu = new Menu(GLOBAL.CTX, GLOBAL.CANVAS);
+GLOBAL.MENU = new Menu();
 
 export class Main {
     constructor() {
@@ -19,10 +19,10 @@ export class Main {
     };
 
     render() {
-        if (!MENU.active) {
+        if (!GLOBAL.MENU.active) {
             GLOBAL.CTX.clearRect(0, 0, GLOBAL.CANVAS.width, GLOBAL.CANVAS.height);
-            if (GLOBAL.PLAYER) {
-                GLOBAL.PLAYER.draw(GLOBAL.CTX);
+            if (GLOBAL.SCENE.active) {
+                GLOBAL.SCENE.render();
             }
         }
     }
