@@ -1,8 +1,8 @@
 {
-    "platforms": [
+    "floors": [
         {
-            "x": 0,
-            "y": 380,
+            "x": 200,
+            "y": 350,
             "width": 300,
             "height": 100
         }

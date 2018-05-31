@@ -3,12 +3,13 @@ import { Terrain } from "./terrain";
 
 export class Scene {
     active: boolean = false;
-    terrain: Terrain;
     constructor() {
-        this.terrain = new Terrain();
+        GLOBAL.TERRAIN = new Terrain();
     }
     render() {
-        GLOBAL.PLAYER.draw(GLOBAL.CTX);
-        this.terrain.render();
+        GLOBAL.PLAYER.draw();
+        GLOBAL.PLAYER._step();
+        GLOBAL.PLAYER._listener();
+        GLOBAL.TERRAIN.render();
     }
 }

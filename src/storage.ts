@@ -34,11 +34,19 @@ export interface Sprite {
         }
     }
 }
+/** Тип данных для окружения */
+export interface Terrain_Type {
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+    sprite?: Sprite_Frame;
+}
 
 // /** Местности */
-// export let TERRAINS:{[index:string]:Terrain_Type} = {
+export let TERRAINS:{[index:string]:Terrain_Type} = {
     
-// }
+}
 /**  */
 export let SPRITES:{[index:string]:Sprite} = {
     'player': {
@@ -150,5 +158,5 @@ export interface Point {
 }
 
 export interface LevelJSON {
-    platforms: CanvasObj[]
+    floors: CanvasObj[]
 }

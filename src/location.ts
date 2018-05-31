@@ -2,6 +2,7 @@ import { Player } from "./characters";
 import { Scene } from "./scene";
 import { Menu } from "./menu";
 import { Terrain } from "./terrain"
+// import { Floor } from "./terrain";
 
 interface GlobalsType {
     /** Персонаж игрока */
@@ -15,6 +16,7 @@ interface GlobalsType {
 
     /** Сцена */
     SCENE: Scene;
+    // TERRAIN: Array<any>;
 
     // /** Меню */
     MENU: Menu;
@@ -36,7 +38,11 @@ export let GLOBAL:GlobalsType = {
     CANVAS: null
 }
 
+
 // GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
+
+// GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
+// GLOBAL.TERRAIN.push( new Floor({x: 50, y: 50}) )
 
 /** Класс загрузки локаций */
 export class Location {

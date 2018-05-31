@@ -1,4 +1,5 @@
-import { CHAR_TYPES, Sprite, Sprite_Frame, Char_Type } from "./storage";
+import { CHAR_TYPES, Sprite, Sprite_Frame, Char_Type, CanvasObj } from "./storage";
+import { GLOBAL } from "./location";
 
 /** Тип данных которые приходят в виде входного аргумента в класс Character */
 interface CharacterOptions {
@@ -52,11 +53,10 @@ class Character {
 
         this.image = new Image();
         this.image.src = this.sprite.url;
-
-        setInterval(() => this._step(), 0);
     }
 
-    draw(ctx:CanvasRenderingContext2D):void {
+    /** Отрисовка этого персонажа */
+    draw():void {
         if (this.in_move) { // Если в движении
             this.spriteFrame = {
                 dWidth: this.sprite.move[this.direction][this.sprite_index].dWidth,
@@ -83,7 +83,7 @@ class Character {
                 sHeight: this.sprite.standing[this.direction].sHeight
             }
         }
-        ctx.drawImage(
+        GLOBAL.CTX.drawImage(
             this.image,
             this.spriteFrame.sx,
             this.spriteFrame.sy,
@@ -96,6 +96,7 @@ class Character {
         );
     }
 
+    /** Общая для всех постоянно выполняемая функция */
     _step():void {
         this.y += this.gravity;
 
@@ -122,23 +123,26 @@ export class Player extends Character {
 
         document.addEventListener('keydown', (e:KeyboardEvent) => this._keyboardEvents(e));
         document.addEventListener('keyup', (e:KeyboardEvent) => this._keyboardEvents(e));
-
-        setInterval(() => this._listener(), 0);
     }
 
     move = {
         left: () => {
-            this.x -= this.speed;
-            this.direction = 'left';
-            this.in_move = true;
+            if (canMove(this.x - this.speed, this.y)) {
+                this.x -= this.speed;
+                this.direction = 'left';
+                this.in_move = true;
+            }
         },
         right: () => {
-            this.x += this.speed;
-            this.direction = 'right';
-            this.in_move = true;
+            if (canMove(this.x + this.speed, this.y)) {
+                this.x += this.speed;
+                this.direction = 'right';
+                this.in_move = true;
+            }
         },
     }
 
+    /** Постоянно выполняемая функция, проверяющая нажатие клавиш */
     _listener():void {
         for (var k in this.keyPressed) { // Нажатие клавиш
             if (this.keyEvents[k]) this.keyEvents[k]();
@@ -153,4 +157,20 @@ export class Player extends Character {
             this.in_move = false;
         }
     }
+}
+
+function contains(obj: CanvasObj, x: number, y: number): boolean {
+    if (x > obj.x && x < obj.x + obj.width && y > obj.y && y < obj.y + obj.height) {
+        return true;
+    }
+    return false;
+}
+
+function canMove(x: number, y: number): boolean {
+    for (let floor of GLOBAL.TERRAIN.floors) {
+        if (contains(floor, x, y)) {
+            return false
+        }
+    }
+    return true
 }

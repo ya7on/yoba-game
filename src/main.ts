@@ -24,7 +24,17 @@ export class Main {
             if (GLOBAL.SCENE.active) {
                 GLOBAL.SCENE.render();
             }
+        // if (!MENU.active) {
+            // GLOBAL.CTX.clearRect(0, 0, GLOBAL.CANVAS.width, GLOBAL.CANVAS.height);
+            // if (GLOBAL.PLAYER) {
+            //     GLOBAL.PLAYER.draw();
+            //     GLOBAL.PLAYER._step();
+            //     GLOBAL.PLAYER._listener();
         }
+            // for (var t in GLOBAL.TERRAIN) {
+            //     GLOBAL.TERRAIN[t].draw();
+            // }
+        // }
     }
 }
 
