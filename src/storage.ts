@@ -24,7 +24,7 @@ export interface Sprite_Frame {
 export interface Sprite {
     // путь к спрайту
     url: string,
-    standing: {
+    standing?: {
         [index:string]: Sprite_Frame;
     }
     move?: {
@@ -33,19 +33,33 @@ export interface Sprite {
             [index:number]: Sprite_Frame
         }
     }
+    sprite?: {
+        [index:number]: Sprite_Frame;
+    }
 }
-/** Тип данных для окружения */
-export interface Terrain_Type {
-    x?: number;
-    y?: number;
+export interface Terrain_Options {
+    x: number;
+    y: number;
     width?: number;
     height?: number;
-    sprite?: Sprite_Frame;
+    type: string;
 }
 
-// /** Местности */
-export let TERRAINS:{[index:string]:Terrain_Type} = {
-    
+/** Местности */
+export let TERRAINS:{[index:string]:Sprite} = {
+    'mario_block': {
+        url: 'media/solid/mario_block.png',
+        sprite: [
+            {
+                dWidth: 64,
+                dHeight: 64,
+                sWidth: 1417,
+                sHeight: 1417,
+                sx: 0,
+                sy: 0
+            }
+        ]
+    }
 }
 /**  */
 export let SPRITES:{[index:string]:Sprite} = {

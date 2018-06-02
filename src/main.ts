@@ -26,8 +26,13 @@ export class Main {
                 GLOBAL.PLAYER._step();
                 GLOBAL.PLAYER._listener();
             }
-            for (var t in GLOBAL.TERRAIN) {
-                GLOBAL.TERRAIN[t].draw();
+            GLOBAL.PLAYER.collision.left = false;
+            GLOBAL.PLAYER.collision.right = false;
+            GLOBAL.PLAYER.collision.top = false;
+            GLOBAL.PLAYER.collision.bottom = false;
+            for (var OBJ of GLOBAL.TERRAIN) {
+                OBJ.draw();
+                OBJ.checkCollision(GLOBAL.PLAYER);
             }
         // }
     }
