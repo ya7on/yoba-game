@@ -21,8 +21,18 @@ export class Main {
     render() {
         if (!GLOBAL.MENU.active) {
             GLOBAL.CTX.clearRect(0, 0, GLOBAL.CANVAS.width, GLOBAL.CANVAS.height);
-            if (GLOBAL.SCENE.active) {
-                GLOBAL.SCENE.render();
+            if (GLOBAL.PLAYER) {
+                GLOBAL.PLAYER.draw();
+                GLOBAL.PLAYER._step();
+                GLOBAL.PLAYER._listener();
+            }
+            GLOBAL.PLAYER.collision.left = false;
+            GLOBAL.PLAYER.collision.right = false;
+            GLOBAL.PLAYER.collision.top = false;
+            GLOBAL.PLAYER.collision.bottom = false;
+            for (var OBJ of GLOBAL.TERRAIN) {
+                OBJ.draw();
+                OBJ.checkCollision(GLOBAL.PLAYER);
             }
         // if (!MENU.active) {
             // GLOBAL.CTX.clearRect(0, 0, GLOBAL.CANVAS.width, GLOBAL.CANVAS.height);

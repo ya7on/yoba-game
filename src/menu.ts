@@ -2,11 +2,11 @@ import { CanvasObj, CanvasButton, Point } from "./storage";
 import { Main } from "./main";
 import { GLOBAL } from "./location"
 import { Player } from "./characters"
-import { Scene } from "./scene";
+// import { Scene } from "./scene";
 
 
 export class Menu {
-    active:Boolean = true;
+    active:Boolean = false;
     items:Array<string>;
     width: number = 200;
     height: number = 50;
@@ -14,9 +14,9 @@ export class Menu {
     buttonEvents: { [key: string]: Function } = {
         start: () => {
             this.close();
-            GLOBAL.SCENE = new Scene();
-            GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
-            GLOBAL.SCENE.active = true;
+            // GLOBAL.SCENE = new Scene();
+            // GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
+            // GLOBAL.SCENE.active = true;
         }
     }
     listener: EventListenerObject = listenClick.bind(this);

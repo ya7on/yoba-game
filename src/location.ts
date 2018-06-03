@@ -1,8 +1,7 @@
 import { Player } from "./characters";
-import { Scene } from "./scene";
+import { Floor, Terrain } from "./terrain";
+import { TERRAINS } from "./storage";
 import { Menu } from "./menu";
-import { Terrain } from "./terrain"
-// import { Floor } from "./terrain";
 
 interface GlobalsType {
     /** Персонаж игрока */
@@ -12,11 +11,7 @@ interface GlobalsType {
     NPC: Array<any>; // TODO
 
     /** Окружение */
-    TERRAIN: Terrain;
-
-    /** Сцена */
-    SCENE: Scene;
-    // TERRAIN: Array<any>;
+    TERRAIN: Array<Terrain>;
 
     // /** Меню */
     MENU: Menu;
@@ -31,18 +26,17 @@ interface GlobalsType {
 export let GLOBAL:GlobalsType = {
     PLAYER: null,
     NPC: [],
-    TERRAIN: null,
-    SCENE: null,
+    TERRAIN: [],
+    // SCENE: null,
     MENU: null,
     CTX: null,
     CANVAS: null
 }
 
-
-// GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
-
-// GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
-// GLOBAL.TERRAIN.push( new Floor({x: 50, y: 50}) )
+GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
+GLOBAL.TERRAIN.push( new Floor({x: 0, y: 250, type: 'mario_block', width: 5, height: 3}) )
+GLOBAL.TERRAIN.push( new Floor({x: 400, y: 150, type: 'mario_block', height: 3}) )
+GLOBAL.TERRAIN.push( new Floor({x: 500, y: 250, type: 'mario_block', width: 5}) )
 
 /** Класс загрузки локаций */
 export class Location {
