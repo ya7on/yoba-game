@@ -2,7 +2,7 @@ import { CHAR_TYPES, Sprite, Sprite_Frame, Char_Type, CanvasObj } from "./storag
 import { GLOBAL } from "./location";
 
 /** Тип данных которые приходят в виде входного аргумента в класс Character */
-interface CharacterOptions {
+export interface CharacterOptions {
     // Начальные координаты
     x: number;
     y: number;

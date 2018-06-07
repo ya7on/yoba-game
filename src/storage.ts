@@ -1,3 +1,5 @@
+import { CharacterOptions } from "./characters"
+
 /**  */
 export interface Char_Type {
     /** hp */
@@ -147,6 +149,12 @@ export let CHAR_TYPES:{[index:string]:Char_Type} = {
         speed: 1,
         sprite: SPRITES.player,
     },
+    'non-player': {
+        name: 'da',
+        hp: 100,
+        speed: 1,
+        sprite: SPRITES.player
+    }
 }
 
 /** Параметры canvas-объекта */
@@ -172,5 +180,6 @@ export interface Point {
 }
 
 export interface LevelJSON {
-    floors: CanvasObj[]
+    floors: CanvasObj[],
+    NPC: CharacterOptions
 }
