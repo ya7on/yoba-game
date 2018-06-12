@@ -12,7 +12,6 @@ export class Menu {
     buttonEvents: { [key: string]: Function } = {
         start: () => {
             this.close();
-            this.active = false;
             GLOBAL.SCENE = new Scene();
             GLOBAL.SCENE.active = true;
         }
@@ -20,11 +19,6 @@ export class Menu {
     listener: EventListenerObject = listenClick.bind(this);
 
     constructor() {
-        GLOBAL.CANVAS.addEventListener('click', this.listener);
-        this.render();
-    }
-
-    render() {
         this.items = ['start', 'settings'];
         GLOBAL.CTX.font = "Bold 24px Courier";
         var x: number = GLOBAL.CTX.canvas.width * 0.5 - 200 * 0.5;
@@ -37,28 +31,43 @@ export class Menu {
                 width: this.width,
                 height: this.height
             }
-            this.drawButton(text, param);
+            this.createButton(text, param);
         }
-
+        GLOBAL.CANVAS.addEventListener('click', this.listener);
     }
 
-    drawButton(text: string, object: CanvasObj) {
-        GLOBAL.CTX.fillStyle = 'pink';
-        GLOBAL.CTX.fillRect(object.x, object.y, object.width, object.height);
-        GLOBAL.CTX.fillStyle = 'black';
+    render() {
+        for (let button of this.buttons) {
+            this.drawButton(button);
+        }
+    }
+
+    createButton(text: string, object: CanvasObj) {
         let center: Point = getCenter(object);
         let textWidth: number = GLOBAL.CTX.measureText(text).width;
         let textHeight: number = textWidth / text.length;
-        GLOBAL.CTX.fillText(text, center.x - textWidth * 0.5, center.y + textHeight * 0.5);
+        let canvasText = {
+            x: center.x - textWidth * 0.5,
+            y: center.y + textHeight * 0.5,
+            text: text
+        }
         this.buttons.push({
             param: object,
-            text: text,
+            textParam: canvasText,
             event: this.buttonEvents[text]
         });
     }
 
+    drawButton(button: CanvasButton) {
+        GLOBAL.CTX.fillStyle = 'pink';
+        GLOBAL.CTX.fillRect(button.param.x, button.param.y, button.param.width, button.param.height);
+        GLOBAL.CTX.fillStyle = 'black';
+        GLOBAL.CTX.fillText(button.textParam.text, button.textParam.x, button.textParam.y);
+    }
+
     close() {
         GLOBAL.CANVAS.removeEventListener('click', this.listener);
+        this.buttons = [];
         this.active = false;
     }
 }

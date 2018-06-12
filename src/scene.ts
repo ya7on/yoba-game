@@ -3,9 +3,11 @@ import { Character, Player } from "./characters"
 import { Floor } from "./terrain";
 import data from "../level_models/one.json";
 
+
 export class Scene {
-    active: boolean = true;
+    active: boolean = false;
     constructor() {
+        this.active = true;
         GLOBAL.PLAYER = new Player({x:1, y:1, type: 'player'});
         GLOBAL.TERRAIN.push( new Floor({x: 0, y: 250, type: 'mario_block', width: 5, height: 3}) )
         GLOBAL.TERRAIN.push( new Floor({x: 400, y: 150, type: 'mario_block', height: 3}) )

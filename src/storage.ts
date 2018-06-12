@@ -165,11 +165,14 @@ export interface CanvasObj {
     height: number
 }
 
-// TODO: Превратить в класс
+export interface CanvasText extends Point {
+    text: string
+}
+
 /** Параметры canvas-кнопок */
 export interface CanvasButton {
     param: CanvasObj,
-    text?: string,
+    textParam: CanvasText,
     event?: Function
 }
 
