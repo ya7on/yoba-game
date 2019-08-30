@@ -1,8 +1,8 @@
-import { CHAR_TYPES, Sprite, Sprite_Frame, Char_Type } from "./storage";
+import { CHAR_TYPES, Sprite, Sprite_Frame, Char_Type, CanvasObj } from "./storage";
 import { GLOBAL } from "./location";
 
 /** Тип данных которые приходят в виде входного аргумента в класс Character */
-interface CharacterOptions {
+export interface CharacterOptions {
     // Начальные координаты
     x: number;
     y: number;
@@ -13,7 +13,7 @@ interface CharacterOptions {
 }
 
 /** Родительский приватный класс персонажей */
-class Character {
+export class Character {
     x: number;
     y: number;
 
@@ -26,9 +26,9 @@ class Character {
 
     gravity:number = 0;
     /** Ускорение свободного падения */
-    G:number = 0.3;
+    G:number = 0.2;
     /** Максимальное ускорение */
-    MAX_GRAVITY:number = 10;
+    MAX_GRAVITY:number = 7;
 
     image: HTMLImageElement;
 
@@ -39,6 +39,13 @@ class Character {
     sprite_index:number = 0;
     anim_speed:number = 100;
     anim_index:number = 0;
+
+    collision = {
+        top: false,
+        bottom: false,
+        left: false,
+        right : false
+    }
 
     constructor(options:CharacterOptions) {
         this.type = CHAR_TYPES[options.type];
@@ -98,13 +105,11 @@ class Character {
 
     /** Общая для всех постоянно выполняемая функция */
     _step():void {
-        this.y += this.gravity;
-
-        this.gravity = this.gravity >= this.MAX_GRAVITY ? this.MAX_GRAVITY : this.gravity + this.G;
-
-        // TEST
-        if (this.y > 200) {
-            this.gravity = -0;
+        if (this.collision.bottom) {
+            this.gravity = 0;
+        } else {
+            this.y += this.gravity;
+            this.gravity = this.gravity >= this.MAX_GRAVITY ? this.MAX_GRAVITY : this.gravity + this.G;
         }
     }
 }
@@ -120,6 +125,7 @@ export class Player extends Character {
         // Забиваются функции на нажатие клавиш
         this.keyEvents[68] = this.move.right;
         this.keyEvents[65] = this.move.left;
+        this.keyEvents[87] = this.move.jump;
 
         document.addEventListener('keydown', (e:KeyboardEvent) => this._keyboardEvents(e));
         document.addEventListener('keyup', (e:KeyboardEvent) => this._keyboardEvents(e));
@@ -127,15 +133,26 @@ export class Player extends Character {
 
     move = {
         left: () => {
-            this.x -= this.speed;
-            this.direction = 'left';
-            this.in_move = true;
+            if (!this.collision.left) {
+                this.x -= this.speed;
+                this.direction = 'left';
+                this.in_move = true;
+            }
         },
         right: () => {
-            this.x += this.speed;
-            this.direction = 'right';
-            this.in_move = true;
+            if (!this.collision.right) {
+                this.x += this.speed;
+                this.direction = 'right';
+                this.in_move = true;
+            }
         },
+        jump: () => {
+            if (this.collision.bottom) {
+                this.gravity = -this.MAX_GRAVITY;
+                this.collision.bottom = false;
+                this.y += this.gravity;
+            }
+        }
     }
 
     /** Постоянно выполняемая функция, проверяющая нажатие клавиш */
@@ -154,3 +171,19 @@ export class Player extends Character {
         }
     }
 }
+
+function contains(obj: CanvasObj, x: number, y: number): boolean {
+    if (x > obj.x && x < obj.x + obj.width && y > obj.y && y < obj.y + obj.height) {
+        return true;
+    }
+    return false;
+}
+
+// function canMove(x: number, y: number): boolean {
+//     for (let floor of GLOBAL.TERRAIN.floors) {
+//         if (contains(floor, x, y)) {
+//             return false
+//         }
+//     }
+//     return true
+// }

@@ -1,35 +1,27 @@
 import { CanvasObj, CanvasButton, Point } from "./storage";
-import { Main } from "./main";
 import { GLOBAL } from "./location"
+import { Scene } from "./scene";
 
 
 export class Menu {
-    active:Boolean = true;
-    items:Array<string>;
+    active: Boolean = true;
+    items: Array<string>;
     width: number = 200;
     height: number = 50;
     buttons: Array<CanvasButton> = [];
-    canvas: HTMLCanvasElement;
-    ctx: CanvasRenderingContext2D;
     buttonEvents: { [key: string]: Function } = {
         start: () => {
             this.close();
-            new Main();
+            GLOBAL.SCENE = new Scene();
+            GLOBAL.SCENE.active = true;
         }
     }
     listener: EventListenerObject = listenClick.bind(this);
 
-    constructor(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-        this.canvas = canvas;
-        this.ctx = ctx;
-        this.canvas.addEventListener('click', this.listener);
-        this.render();
-    }
-
-    render() {
+    constructor() {
         this.items = ['start', 'settings'];
-        this.ctx.font = "Bold 24px Courier";
-        var x: number = this.ctx.canvas.width * 0.5 - 200 * 0.5;
+        GLOBAL.CTX.font = "Bold 24px Courier";
+        var x: number = GLOBAL.CTX.canvas.width * 0.5 - 200 * 0.5;
         var y: number = 100;
         for (var text of this.items) {
             y += 100;
@@ -39,28 +31,43 @@ export class Menu {
                 width: this.width,
                 height: this.height
             }
-            this.drawButton(text, param);
+            this.createButton(text, param);
         }
-
+        GLOBAL.CANVAS.addEventListener('click', this.listener);
     }
 
-    drawButton(text: string, object: CanvasObj) {
-        GLOBAL.CTX.fillStyle = 'pink';
-        GLOBAL.CTX.fillRect(object.x, object.y, object.width, object.height);
-        GLOBAL.CTX.fillStyle = 'black';
+    render() {
+        for (let button of this.buttons) {
+            this.drawButton(button);
+        }
+    }
+
+    createButton(text: string, object: CanvasObj) {
         let center: Point = getCenter(object);
         let textWidth: number = GLOBAL.CTX.measureText(text).width;
         let textHeight: number = textWidth / text.length;
-        GLOBAL.CTX.fillText(text, center.x - textWidth * 0.5, center.y + textHeight * 0.5);
+        let canvasText = {
+            x: center.x - textWidth * 0.5,
+            y: center.y + textHeight * 0.5,
+            text: text
+        }
         this.buttons.push({
             param: object,
-            text: text,
+            textParam: canvasText,
             event: this.buttonEvents[text]
         });
     }
 
+    drawButton(button: CanvasButton) {
+        GLOBAL.CTX.fillStyle = 'pink';
+        GLOBAL.CTX.fillRect(button.param.x, button.param.y, button.param.width, button.param.height);
+        GLOBAL.CTX.fillStyle = 'black';
+        GLOBAL.CTX.fillText(button.textParam.text, button.textParam.x, button.textParam.y);
+    }
+
     close() {
-        this.canvas.removeEventListener('click', this.listener);
+        GLOBAL.CANVAS.removeEventListener('click', this.listener);
+        this.buttons = [];
         this.active = false;
     }
 }

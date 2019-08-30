@@ -1,3 +1,5 @@
+import { CharacterOptions } from "./characters"
+
 /**  */
 export interface Char_Type {
     /** hp */
@@ -24,7 +26,7 @@ export interface Sprite_Frame {
 export interface Sprite {
     // путь к спрайту
     url: string,
-    standing: {
+    standing?: {
         [index:string]: Sprite_Frame;
     }
     move?: {
@@ -33,19 +35,33 @@ export interface Sprite {
             [index:number]: Sprite_Frame
         }
     }
+    sprite?: {
+        [index:number]: Sprite_Frame;
+    }
 }
-/** Тип данных для окружения */
-export interface Terrain_Type {
-    x?: number;
-    y?: number;
+export interface Terrain_Options {
+    x: number;
+    y: number;
     width?: number;
     height?: number;
-    sprite?: Sprite_Frame;
+    type: string;
 }
 
-// /** Местности */
-export let TERRAINS:{[index:string]:Terrain_Type} = {
-    
+/** Местности */
+export let TERRAINS:{[index:string]:Sprite} = {
+    'mario_block': {
+        url: 'media/solid/mario_block.png',
+        sprite: [
+            {
+                dWidth: 64,
+                dHeight: 64,
+                sWidth: 1417,
+                sHeight: 1417,
+                sx: 0,
+                sy: 0
+            }
+        ]
+    }
 }
 /**  */
 export let SPRITES:{[index:string]:Sprite} = {
@@ -133,6 +149,12 @@ export let CHAR_TYPES:{[index:string]:Char_Type} = {
         speed: 1,
         sprite: SPRITES.player,
     },
+    'non-player': {
+        name: 'da',
+        hp: 100,
+        speed: 1,
+        sprite: SPRITES.player
+    }
 }
 
 /** Параметры canvas-объекта */
@@ -143,16 +165,24 @@ export interface CanvasObj {
     height: number
 }
 
-// TODO: Превратить в класс
+export interface CanvasText extends Point {
+    text: string
+}
+
 /** Параметры canvas-кнопок */
 export interface CanvasButton {
     param: CanvasObj,
-    text?: string,
+    textParam: CanvasText,
     event?: Function
 }
 
-/** Кордина типа (x, y) */
+/** Кордината типа (x, y) */
 export interface Point {
     x: number,
     y: number
+}
+
+export interface LevelJSON {
+    floors: CanvasObj[],
+    NPC: CharacterOptions
 }
